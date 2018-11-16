@@ -141,6 +141,13 @@ class Ghostscript
      */
     protected $resolution = 72;
 
+	/**
+	 * Store the device dimension for use with -g
+	 *
+	 * @var string $_deviceDimensions
+	 */
+    protected $deviceDimensions = null;
+
     /**
      * This property stores the file to process.
      *
@@ -456,6 +463,10 @@ class Ghostscript
             $string .= ' -dGraphicsAlphaBits=' . $this->getGraphicsAntiAliasing();
         }
 
+	    $deviceDimensions = $this->getDeviceDimensions();
+        if(null !== $deviceDimensions) {
+        	$string .= ' -g' . $deviceDimensions;
+        }
 
         if (true === $this->useCie()) {
             $string .= ' -dUseCIEColor';
@@ -613,6 +624,31 @@ class Ghostscript
     {
         return $this->resolution;
     }
+
+	/**
+	 * Set the dimensions for device height/width
+	 *
+	 * @param int The width in pixels to set
+	 * @param int The height in pixels to set
+	 *
+	 * @return self
+	 */
+	public function setDeviceDimensions($width, $height)
+	{
+		$this->deviceDimensions = "{$width}x{$height}";
+
+		return $this;
+	}
+
+	/**
+	 * Get the device dimensions
+	 *
+	 * @return string
+	 */
+	public function getDeviceDimensions()
+	{
+		return $this->deviceDimensions;
+	}
 
     /**
      * Set the output-device
