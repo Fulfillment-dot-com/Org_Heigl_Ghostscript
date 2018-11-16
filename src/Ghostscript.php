@@ -187,7 +187,14 @@ class Ghostscript
      */
     protected $useCie = false;
 
-    /**
+	/**
+	 * Store whether to use FitPage option
+	 *
+	 * @var boolean $_useFitPage
+	 */
+	protected $useFitPage = false;
+
+	/**
      * Store any default input-profiles
      *
      * @var array $_defaultProfile
@@ -472,6 +479,10 @@ class Ghostscript
             $string .= ' -dUseCIEColor';
         }
 
+	    if(true === $this->useFitPage()) {
+	    	$string .= ' -dFitPage';
+	    }
+
         // Set the Rendered Box.
         $box = $this->getBox();
         if (null !== $box) {
@@ -701,6 +712,30 @@ class Ghostscript
     {
         return (bool) $this->useCie;
     }
+
+	/**
+	 * Set whether to use the FitPage flag
+	 *
+	 * @param boolean $useFitPage
+	 *
+	 * @return self
+	 */
+	public function setUseFitPage($useFitPage = true)
+	{
+		$this->useFitPage = (bool) $useFitPage;
+
+		return $this;
+	}
+
+	/**
+	 * Shall we use the FitPage flag?
+	 *
+	 * @return boolean
+	 */
+	public function useFitPage()
+	{
+		return (bool) $this->useFitPage;
+	}
 
     /**
      * Which Box shall be used to generate the output from.
